@@ -1,0 +1,8 @@
+= 通用文件系统抽象
+:experimental:
+:icons: font
+:toc: right
+:toc-title: 目录
+:toclevels: 4
+
+一个简易的文件系统抽象，用于与其他项目糅合
