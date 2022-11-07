@@ -1,3 +1,5 @@
+@file:Suppress("UNUSED_VARIABLE")
+
 plugins {
     kotlin("multiplatform") version "1.7.20"
     `maven-publish`
@@ -8,6 +10,7 @@ version = rootProject.property("version")!!
 
 repositories {
     mavenCentral()
+    maven { setUrl("https://repos.d7z.net/maven") }
 }
 
 kotlin {
@@ -22,7 +25,7 @@ kotlin {
     }
     js(BOTH) {
         browser {
-            commonWebpackConfig {
+            commonWebpackConfig() {
                 cssSupport.enabled = true
             }
         }
@@ -37,7 +40,11 @@ kotlin {
     }
 
     sourceSets {
-        val commonMain by getting
+        val commonMain by getting {
+            dependencies {
+                api("com.github.d7z-team.kmm-utils:kmm-utils:0.0.1-SNAPSHOT") // library shared for all source sets
+            }
+        }
         val commonTest by getting {
             dependencies {
                 implementation(kotlin("test"))
@@ -51,32 +58,18 @@ kotlin {
         val nativeTest by getting
     }
 }
-
-
 publishing {
-    publications {
-        create<MavenPublication>("maven") {
-            groupId = (parent ?: rootProject).group.toString()
-            version = (parent ?: rootProject).version.toString()
-            artifactId = project.name
-            from(components["java"])
-        }
-    }
     repositories {
         mavenLocal()
-        project.findProperty("m2.url")
-            ?: System.getenv("MAVEN_REPO_URL")
-                ?.toString()?.let {
-                    maven {
-                        name = "Remote"
-                        url = project.uri(it)
-                        credentials {
-                            username =
-                                (project.findProperty("m2.account") ?: System.getenv("MAVEN_ACCOUNT"))?.toString()
-                            password =
-                                (project.findProperty("m2.password") ?: System.getenv("MAVEN_PASSWORD"))?.toString()
-                        }
-                    }
+        project.findProperty("m2.url") ?: System.getenv("MAVEN_REPO_URL")?.toString()?.let {
+            maven {
+                name = "Remote"
+                url = project.uri(it)
+                credentials {
+                    username = (project.findProperty("m2.account") ?: System.getenv("MAVEN_ACCOUNT"))?.toString()
+                    password = (project.findProperty("m2.password") ?: System.getenv("MAVEN_PASSWORD"))?.toString()
                 }
+            }
+        }
     }
 }
