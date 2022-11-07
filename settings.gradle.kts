@@ -1,3 +1,2 @@
 
-rootProject.name = "VirtualFsSystem"
-
+rootProject.name = "vfs-kt"

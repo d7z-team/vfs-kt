@@ -4,3 +4,5 @@
 ./idea/**
 !.gitkeep
 !.gitignore
+.gradle
+/kotlin-js-store
