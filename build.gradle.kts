@@ -43,6 +43,7 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 api("com.github.d7z-team.kmm-utils:kmm-utils:0.0.1-SNAPSHOT") // library shared for all source sets
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.6.4")
             }
         }
         val commonTest by getting {
